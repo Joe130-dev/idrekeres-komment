@@ -1,17 +1,21 @@
 
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 
-// Kommentek megjelenítése
+// Bejegyzések megjelenítése
 const ListaKomponens = ({ elem }) => {
   return (
     <div className="container">
-      {elem.map(komment => (
-        <div className="row m-3 p-3 border" key={komment.id}>
+      {elem.map(bejegyzes => (
+        <div className="row m-3 p-3 border" key={bejegyzes.id}>
           <div>
-            <strong>{komment.name}</strong> - {komment.email}
+            <strong>{bejegyzes.title}</strong>
           </div>
-          <div>{komment.body}</div>
+          <div>
+            Felhasználó azonosító: {bejegyzes.userId}
+          </div>
+          <div>{bejegyzes.body}</div>
         </div>
       ))}
     </div>
@@ -24,29 +28,23 @@ export const App = () => {
 
   useEffect(() => {
 
-    // Fetch API - async/await használatával
-    const kommentBetoltes = async () => {
+    // Axios - async/await használatával
+    const bejegyzesBetoltes = async () => {
       try {
-        const response = await fetch('https://harmadik.sulla.hu/Comment');
-
-        if (!response.ok) {
-          throw new Error('Hiba történt az adatlekérés során!');
-        }
-
-        const adatok = await response.json();
-        setAdat(adatok);
+        const response = await axios.get('https://harmadik.sulla.hu/Post');
+        setAdat(response.data);
       }
       catch (error) {
         setHiba(error.message);
       }
     };
 
-    kommentBetoltes();
+    bejegyzesBetoltes();
 
   }, []);
 
   // dependency array - függőségi tömb:
-  // ha üres: akkor 1x fut le a betöltés
+  // ha üres: akkor egyszer fut le a betöltés
   // ha változó van benne: annak változásakor újra lefut
   // ha nincs megadva: minden renderelés után lefut
 
