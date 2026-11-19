@@ -18,14 +18,20 @@ const [adat, setAdat] = useState([]);
 const [hiba, setHiba] = useState('');
 const [id] = useState(500);
   useEffect(() => {
-    const kommentBetoltes = async () =>  {
-      try {
-        const response = await axios.get(`https://harmadik.sulla.hu/Comment/${id}`);
-        setAdat(response.data);
-        }
-      catch (error) { setHiba(error.message); }
+    // Fetch API - Promise chain (.then) használatával
+fetch(`https://harmadik.sulla.hu/Comment/${id}`)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Hiba történt az adatlekérés során!');
     }
-    kommentBetoltes(); 
+    return response.json();
+  })
+  .then(adatok => {
+    setAdat(adatok);
+  })
+  .catch(error => {
+    setHiba(error.message);
+  });
     }, [id]);
   // dependency array - függőségi tömb: 
   // ha üres: akkor 1x frissül le,  
