@@ -28,8 +28,8 @@ export const App = () => {
 
   useEffect(() => {
 
-    // Axios - async/await használatával
-    const bejegyzesBetoltes = async () => {
+    // Axios - async IIFE használatával
+    (async () => {
       try {
         const response = await axios.get('https://harmadik.sulla.hu/Post');
         setAdat(response.data);
@@ -37,9 +37,7 @@ export const App = () => {
       catch (error) {
         setHiba(error.message);
       }
-    };
-
-    bejegyzesBetoltes();
+    })();
 
   }, []);
 
